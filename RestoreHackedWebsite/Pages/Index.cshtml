@@ -1,0 +1,136 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<body onload="OverlayCheck(@Model.startCheck)">
+    <div>
+        <div>
+            <a asp-page="/Login">Anställda Login</a>
+            <div class="Side-Links">
+                @if (Model.cookieCheck == 1)
+                {
+                    <a asp-page="/Our-services" id="ServiceLink">Vår Service</a>
+                    <a asp-page="/Website-template" id="TemplateLink">Se ett exempel över hur din websida kan se ut!</a>
+                }
+                else
+                {
+                    <a asp-page="/Our-services" id="brokenService" class="brokenLink">Vår Service</a>
+                    <a asp-page="/Website-template" id="brokenTemplate" class="brokenLink">Se ett exempel över hur din websida kan se ut!</a>
+                }
+            </div>
+
+        </div>
+        <div class="text-center">
+            <h1 class="display-4">Välkomen till Acme Website Design</h1>
+            <a asp-page="/Contact">Kontakta Oss</a>
+            <a asp-page="/About-us">Om oss</a>
+
+        </div>
+    </div>
+    <div>
+        @if (Model.FailedCookie) 
+        {
+            <div class="FailMessage">
+                <h3>Fel Kod!</h3>
+            </div>
+        }
+    </div>
+    <div id="CookiePuzzleContainer" class="HiddenPuzzle" >
+        <div>
+            <div style="grid-template-columns: repeat(3, 1fr); display:grid;" >
+                @foreach (var word in Model.HomeLogic.GetCookieWords())
+                {
+                    switch (word)
+                    {
+                        case "String":
+                            <div class="Indigo-Highlight"><h3>@word</h3></div>
+                            break;
+                        case "Byte":
+                            <div class="Darkblue-Highlight"><h3>@word</h3></div>
+                            break;
+                        case "URL":
+                            <div class="Green-Highlight"><h3>@word</h3></div>
+                            break;
+                        case "API":
+                            <div class="Brown-Highlight"><h3>@word</h3></div>
+                            break;
+                        case "Menu":
+                            <div class="Red-Highlight"><h3>@word</h3></div>
+                            break;
+                        case "Encrypted":
+                            <div class="Orange-Highlight"><h3>@word</h3></div>
+                            break;
+                        default:
+                            <h3>@word</h3>
+                            break;
+                    }
+                }
+            </div>
+        </div>
+        <div>
+            <form asp-page-handler="SolveCookie" method="post">
+                <input type="text" id="CookieInput" oninput="enableBtn()" asp-for="CookiePassword" />
+                <button type="submit" id="CookieBtn" disabled>Lös koden</button>
+            </form>
+        </div>
+        <div>
+            <div class="Indigo-Highlight"><h3>Ett</h3></div>
+            <div class="Darkblue-Highlight"><h3>Två</h3></div>
+            <div class="Green-Highlight"><h3>Tre</h3></div>
+            <div class="Brown-Highlight"><h3>Fyra</h3></div>
+            <div class="Red-Highlight"><h3>Fem</h3></div>
+            <div class="Orange-Highlight"><h3>Sex</h3></div>
+        </div>
+
+    </div>
+    <div id="CookieFooter">
+        <div>
+            <p>Vår sida använder cookies och relaterad teknologi för att förbättra användarnas upplevelse genom att visa anpassade annonser och innehåll.</p>
+            <p>Genom att klicka "Acceptera" väljer du att vår sida använder dina cookies för detta ändamål.</p>
+        </div>
+        <div>
+            <p id="HiddenCookieText">Håll ctrl+alt+y samtidigt</p>
+        </div>
+        
+        <div class="Center-Links">
+            <a id="Cookie-Accept" onclick="ClearCookieWindow(@Model.cookieCheck)">Acceptera cookies</a>
+            <a id="Cookie-Reject" onclick="ClearCookieWindow(@Model.cookieCheck)">Avvisa cookies</a>
+        </div>
+
+    </div>
+</body>
+<div id="overlay">
+    <form asp-page-handler="Start" method="post">
+        <button id="StartCloseBtn" class="FakeBtn" disabled type="submit">Stäng</button>
+    </form>
+
+    <div class="Center">
+        <h1 class="HackerTxt">Vi har hackat denna websida! ¤_I_* </h1>
+        <img id="StartHackImg" class="HackerImg" src="Images/HackerSymbol.png" onclick="ShowStartPuzzle()" style="width:150px;height:200px;">
+    </div>
+ 
+    <div class="HiddenPuzzle" id="StartPuzzleContainer">
+        <button id="startPuzzleBtn_7" class="startPuzzleBtn" value="7" onclick="SolveStartPuzzle(7)">Klicka Först!</button>
+        <button id="startPuzzleBtn_3" class="startPuzzleBtn" value="3" onclick="SolveStartPuzzle(3)">Klicka MIG!</button>
+        <button id="startPuzzleBtn_1" class="startPuzzleBtn" value="1" onclick="SolveStartPuzzle(1)">Klack</button>
+        <button id="startPuzzleBtn_5" class="startPuzzleBtn" value="5" onclick="SolveStartPuzzle(5)">Klickity</button>
+        <button id="startPuzzleBtn_8" class="startPuzzleBtn" value="8" onclick="SolveStartPuzzle(8)">Klicka Här</button>
+        <button id="startPuzzleBtn_2" class="startPuzzleBtn" value="2" onclick="SolveStartPuzzle(2)">Klacka</button>
+        <button id="startPuzzleBtn_6" class="startPuzzleBtn" value="6" onclick="SolveStartPuzzle(6)">Klicka Inte</button>
+        <button id="startPuzzleBtn_9" class="startPuzzleBtn" value="9" onclick="SolveStartPuzzle(9)">Klicka Nästa</button>
+        <button id="startPuzzleBtn_4" class="startPuzzleBtn" value="4" onclick="SolveStartPuzzle(4)">Dubbel Klicka </button>
+    </div>
+    <div>
+        <span id="plup1" class="plup"></span>
+        <span id="plup2" class="plup"></span>
+        <span id="plup3" class="plup"></span>
+        <span id="plup4" class="plup"></span>
+        <span id="plup5" class="plup"></span>
+        <span id="plup6" class="plup"></span>
+        <span id="plup7" class="plup"></span>
+        <span id="plup8" class="plup"></span>
+        <span id="plup9" class="plup"></span>
+    </div>
+</div>

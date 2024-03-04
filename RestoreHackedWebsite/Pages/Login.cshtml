@@ -1,0 +1,35 @@
+﻿@page
+@model RestoreHackedWebsite.Pages.LoginModel
+@{
+}
+
+@if (Model.Account == null)
+{
+    <div class="Center">
+        <form asp-page-handler="Login" method="post">
+            <div>
+                <div>
+                    <input id="UsernameField" type="text" asp-for="Username" />
+                    <label for="UsernameField">Användarnamn</label>
+                </div>
+                <div>
+                    <input id="PasswordField" type="password" asp-for="Password" />
+                    <label for="PasswordField">Lösenord</label>
+                </div>
+                <label for="ShowPassword">Visa Lösenord</label>
+                <input id="ShowPassword" type="checkbox" />
+            </div>
+            <div>
+                <button type="submit" id="LoginBtn">Logga in</button>
+            </div>
+        </form>
+    </div>
+}
+else if (Model.Account.Role.Equals("Employee"))
+{
+    <h2>Loggad in som @Model.Account.Username</h2>
+}
+else if (Model.Account.Role.Equals("Admin"))
+{
+    <h2>Loggad in som Admin</h2>
+}
